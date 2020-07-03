@@ -1,0 +1,6 @@
+You need Python 3.5+ installed along with the following modules -
+
+pandas
+scipy
+numpy
+sklearn
