@@ -1,7 +1,7 @@
 
 # Movie Recommender System
 
-Implementation of a movie recommendation system using the [MovieLens dataset](https://grouplens.org/datasets/movielens/) based on 3 models -
+Implementation of a movie recommendation system using the [MovieLens dataset](https://grouplens.org/datasets/movielens/) based on 4 models -
  
 1. Item-rating correlation based
 
@@ -14,6 +14,10 @@ Uses genres of movies and associated tags to create metadata for each movie, whi
 3. Collaborative filtering matrix-factorization model-based
 
 Generates recommended movies for users based on previous ratings of movies (defined in the 'ratings' and 'user_ratings' files). Creates a user-movie rating matrix and decomposes it using scipy's sparse SVD then multiplies the decomposed matrices back together to generate the predicted ratings for each user. Movies with highest predicted ratings are recommended for a particular user. Read more about it [here](https://heartbeat.fritz.ai/recommender-systems-with-python-part-iii-collaborative-filtering-singular-value-decomposition-5b5dcb3f242b)
+
+4. Deep-learning user-movie embedding based
+
+The model is in development.
 
 ## Dataset
 
