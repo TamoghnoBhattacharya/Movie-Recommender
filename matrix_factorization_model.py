@@ -7,7 +7,7 @@ def matrix_fact_model(userID, num_recommends):
     ratings = pd.read_csv('datasets/ratings.csv', usecols=['userId', 'movieId', 'rating'])
     user_ratings = pd.read_csv('datasets/user_ratings.csv')
     movies = pd.read_csv('datasets/movies.csv')
-    ratings = ratings.append(user_ratings)
+    ratings = ratings.append(user_ratings, ignore_index=True)
     Ratings = ratings.pivot(index='userId', columns='movieId', values='rating')
     rating_matrix = Ratings.to_numpy()
     rating_mask = (~np.isnan(rating_matrix)).astype('int')
@@ -27,5 +27,5 @@ def matrix_fact_model(userID, num_recommends):
     recommendations = movies.merge(pd.DataFrame(sorted_predictions).reset_index(), how='left', left_on='movieId', right_on='movieId').rename(columns = {userID:'Predictions'})
     recommendations = recommendations.sort_values('Predictions', ascending=False)
     recommendations = recommendations[:num_recommends]
-    recommendations = recommendations.drop(columns=['movieId', 'genres'])
+    recommendations = recommendations.drop(columns=['movieId', 'genres', 'Predictions'])
     return recommendations
