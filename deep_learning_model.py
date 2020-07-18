@@ -43,10 +43,9 @@ def deep_learning_embeddings_model(userID, num_recommendations):
     model = Model(inputs=[user, movie], outputs=x)
     opt = Adam(lr=0.001)
     model.compile(loss='mean_squared_error', optimizer=opt)
-    model.fit(X_train_array, Y_train, batch_size=64, epochs=10, verbose=2, validation_data=(X_test_array, Y_test))
-    print('\n')
+    model.fit(X_train_array, Y_train, batch_size=64, epochs=5, verbose=2, validation_data=(X_test_array, Y_test))
     
-    movieIds = item_enc.transform(ratings['movieId'].unique())
+    movieIds = item_enc.transform(ratings.loc[~ratings['movieId'].isin(user_ratings['movieId'])]['movieId'].unique())
     userIDs = np.repeat(userID, movieIds.size)
     userIDs = user_enc.transform(userIDs)
     X_pred = np.column_stack((userIDs, movieIds))
@@ -55,4 +54,5 @@ def deep_learning_embeddings_model(userID, num_recommendations):
     indices = np.ravel(Y_pred).argsort()[-num_recommendations:][::-1]
     movieIds = item_enc.inverse_transform(movieIds[indices])
     recommendations = movies.loc[movies['movieId'].isin(movieIds)]['title']
+    recommendations = pd.DataFrame(recommendations, columns=['title'])
     return recommendations
