@@ -17,7 +17,7 @@ Generates recommended movies for users based on previous ratings of movies (defi
 
 4. Deep-learning user-movie embedding based
 
-The model is in development.
+Generates recommended movies for users based on previous ratings of movies (defined in the 'ratings' and 'user_ratings' files). Creates an n-dimensional embedding for each user and movie and then uses 2 fully connected layers to predict the rating for given movie. Movies with highest predicted ratings are recommended for a particular user. Read more about it [here](https://towardsdatascience.com/recommendation-system-series-part-2-the-10-categories-of-deep-recommendation-systems-that-189d60287b58)  
 
 ## Dataset
 
@@ -33,8 +33,22 @@ Use main.py file and run the module on your system. The requirements for running
 
 ## Performance
 
-There is no training required for item-based models. For matrix factorization model, we computed root mean squared error for different values of k (the number of latent factors in sparse svd) and obtained the following curve -
+There is no training required for item-based models.
 
-![](./assets/Matrix_Fact_Performance_Curve.png)
+ For matrix factorization model, we computed root mean squared error for different values of k (the number of latent factors in sparse svd) and obtained the following curve -
 
-The error drops steeply as k is increased meaning closer predictions however since most of the entries in ratings matrix are 0, the model starts overfitting at higher values of k and fails to pick up on movie features and tastes of users. The model gives most realistic recommendations at k=40 where RMSE is around 2.1 (neither too high nor too low)
+![](./assets/Matrix_Factorization_Performance_Curve.png)
+
+The error drops steeply as k is increased meaning closer predictions however since most of the entries in ratings matrix are 0, the model starts overfitting at higher values of k and fails to pick up on movie features and tastes of users. The model gives most realistic recommendations at k=40 where RMSE is around 2.1 (neither too high nor too low).
+
+For deep learning model, the learning curve for mean squared error loss vs number of epochs trained is as follows -
+
+![](./assets/Deep_learning_Embedding_Performance_Curve.png)
+
+The batch size used is 64, and optimizer set to Adam with a learning rate of 0.001. From the curve it is pretty much clear that the elbow of the training curve occurs at around the 5th epoch and the test loss saturates at around the 10th with a minimum value of 0.79, which is pretty close to 'State Of The Art' for this dataset. However, to reduce overfitting to the test set number of epochs have been chosen to be 5. The model architecture is -
+
+1. Embedding Layer - 50-dimensional embeddings for both users as well as movies.
+2. Dense Hidden Layer - Size 10, ReLU activation with He-initialization.
+3. Dense Output Layer - Size 1, Sigmoid activation with He-initialization. 
+
+The output is then rescaled to produce the final predicted rating for user on the given movie.
